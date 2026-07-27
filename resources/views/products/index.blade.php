@@ -10,7 +10,7 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
                 <div class="flex justify-between items-center mb-6">
                     <h3 class="text-lg font-bold">Listado de Productos</h3>
-                    <a href="{{ route('products.create') }}" class="bg-pink-600 hover:bg-pink-700 text-white font-bold py-2 px-4 rounded">
+                    <a href="{{ route('products.create') }}" class="bg-pink-600 hover:bg-pink-700 text-white font-bold py-2 px-4 rounded" style="background-color: #db2777;">
                         + Nuevo Producto
                     </a>
                 </div>
@@ -22,19 +22,31 @@
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Categoría</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Precio</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Stock</th>
+                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Acciones</th>
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
                         @forelse ($products as $product)
                             <tr>
-                                <td class="px-6 py-4 whitespace-nowrap">{{ $product->nombre }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap font-medium">{{ $product->nombre }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap">{{ $product->category->nombre ?? 'Sin categoría' }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap">${{ number_format($product->precio, 2) }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap">{{ $product->stock }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                    <!-- Botón Editar -->
+                                    <a href="{{ route('products.edit', $product->id) }}" class="text-indigo-600 hover:text-indigo-900 mr-3">Editar</a>
+                                    
+                                    <!-- Formulario Eliminar -->
+                                    <form action="{{ route('products.destroy', $product->id) }}" method="POST" class="inline-block" onsubmit="return confirm('¿Seguro que deseas eliminar este producto?');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="text-red-600 hover:text-red-900">Eliminar</button>
+                                    </form>
+                                </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="4" class="px-6 py-4 text-center text-gray-500">No hay productos registrados aún.</td>
+                                <td colspan="5" class="px-6 py-4 text-center text-gray-500">No hay productos registrados aún.</td>
                             </tr>
                         @endforelse
                     </tbody>
