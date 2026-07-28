@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aura Glow Cosmetics</title>
-  <!-- Carga de Tailwind CSS desde CDN -->
+    <!-- Carga de Tailwind CSS desde CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -30,6 +30,7 @@
         @media (min-width: 768px) { .product-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
         @media (min-width: 1024px) { .product-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
     </style>
+</head>
 <body class="bg-pink-50 min-h-screen text-gray-800">
 
     <!-- Navegación -->
@@ -59,18 +60,35 @@
 
     <!-- Grilla de Productos -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
-       <div class="product-grid gap-6">
+        <div class="product-grid">
             @forelse ($products as $product)
-                <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition">
-                    <div class="p-5">
-                        <span class="text-xs font-semibold text-pink-500 uppercase tracking-wider">
-                            {{ $product->category->nombre ?? 'Sin categoría' }}
-                        </span>
-                        <h3 class="text-lg font-bold text-gray-800 mt-1">{{ $product->nombre }}</h3>
-                        <p class="text-gray-500 text-sm mt-2 line-clamp-2">
-                            {{ $product->descripcion ?? 'Sin descripción disponible.' }}
-                        </p>
-                        <div class="flex justify-between items-center mt-4 pt-4 border-t border-gray-100">
+                <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition flex flex-col justify-between">
+                    <!-- Imagen del Producto -->
+                    <div>
+                        @if ($product->imagen)
+                            <img src="{{ asset('storage/' . $product->imagen) }}" alt="{{ $product->nombre }}" class="w-full h-48 object-cover">
+                        @else
+                            <div class="w-full h-48 bg-pink-100 flex items-center justify-center text-pink-400">
+                                <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                </svg>
+                            </div>
+                        @endif
+
+                        <div class="p-5">
+                            <span class="text-xs font-semibold text-pink-500 uppercase tracking-wider">
+                                {{ $product->category->nombre ?? 'Sin categoría' }}
+                            </span>
+                            <h3 class="text-lg font-bold text-gray-800 mt-1">{{ $product->nombre }}</h3>
+                            <p class="text-gray-500 text-sm mt-2 line-clamp-2">
+                                {{ $product->descripcion ?? 'Sin descripción disponible.' }}
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Pie de la tarjeta -->
+                    <div class="p-5 pt-0">
+                        <div class="flex justify-between items-center pt-4 border-t border-gray-100">
                             <span class="text-xl font-bold text-pink-600">${{ number_format($product->precio, 2) }}</span>
                             <span class="text-xs font-medium text-gray-500 bg-gray-100 px-2.5 py-1 rounded">Stock: {{ $product->stock }}</span>
                         </div>

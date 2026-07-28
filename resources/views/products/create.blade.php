@@ -8,7 +8,8 @@
     <div class="py-12">
         <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-                <form action="{{ route('products.store') }}" method="POST">
+                <!-- Se incluye enctype para permitir el envío de archivos -->
+                <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
 
                     <!-- Nombre -->
@@ -40,6 +41,24 @@
                         </div>
                     </div>
 
+                    <!-- Descripción -->
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2">Descripción</label>
+                        <textarea name="descripcion" class="w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500" rows="3"></textarea>
+                    </div>
+
+                    <!-- Imagen del Producto con Previsualización -->
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2">Imagen del Producto</label>
+                        <input type="file" name="imagen" id="imagen-input" accept="image/*" class="w-full border-gray-300 rounded-md shadow-sm p-2 border">
+                        
+                        <!-- Vista previa de la imagen cargada -->
+                        <div class="mt-3 hidden" id="preview-container">
+                            <span class="text-xs text-gray-500 block mb-1">Vista previa de la imagen:</span>
+                            <img id="image-preview" src="#" alt="Previsualización" class="w-32 h-32 object-cover rounded-md border shadow-sm">
+                        </div>
+                    </div>
+
                     <!-- Botones -->
                     <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
                         <a href="{{ route('products.index') }}" 
@@ -55,4 +74,19 @@
             </div>
         </div>
     </div>
+
+    <!-- Script para generar la vista previa al seleccionar el archivo -->
+    <script>
+        document.getElementById('imagen-input').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    document.getElementById('image-preview').setAttribute('src', event.target.result);
+                    document.getElementById('preview-container').classList.remove('hidden');
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
 </x-app-layout>

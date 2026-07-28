@@ -8,7 +8,8 @@
     <div class="py-12">
         <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-                <form action="{{ route('products.update', $product->id) }}" method="POST">
+                <!-- Se agregó enctype="multipart/form-data" para permitir subir archivos -->
+                <form action="{{ route('products.update', $product->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
 
@@ -46,6 +47,19 @@
                     <div class="mb-4">
                         <label class="block text-gray-700 text-sm font-bold mb-2">Descripción</label>
                         <textarea name="descripcion" class="w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500" rows="3">{{ $product->descripcion }}</textarea>
+                    </div>
+
+                    <!-- Imagen del Producto -->
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2">Imagen del Producto</label>
+                        @if ($product->imagen)
+                            <div class="mb-2">
+                                <span class="text-xs text-gray-500 block mb-1">Imagen actual:</span>
+                                <img src="{{ asset('storage/' . $product->imagen) }}" alt="{{ $product->nombre }}" class="w-20 h-20 object-cover rounded-md border">
+                            </div>
+                        @endif
+                        <input type="file" name="imagen" accept="image/*" class="w-full border-gray-300 rounded-md shadow-sm">
+                        <p class="text-xs text-gray-500 mt-1">Deja este campo en blanco si no deseas cambiar la imagen.</p>
                     </div>
 
                     <!-- Botones -->

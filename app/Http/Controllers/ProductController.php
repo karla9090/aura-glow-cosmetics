@@ -37,22 +37,21 @@ public function store(Request $request)
         'precio' => 'required|numeric|min:0',
         'stock' => 'required|integer|min:0',
         'descripcion' => 'nullable|string',
+        'imagen' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
     ]);
 
-    // Crear el producto agregando el slug automáticamente
-    Product::create([
-        'nombre' => $request->nombre,
-        'slug' => Str::slug($request->nombre),
-        'category_id' => $request->category_id,
-        'precio' => $request->precio,
-        'stock' => $request->stock,
-        'descripcion' => $request->descripcion,
-    ]);
+    $data = $request->all();
+    $data['slug'] = Str::slug($request->nombre);
+
+    if ($request->hasFile('imagen')) {
+        $data['imagen'] = $request->file('imagen')->store('products', 'public');
+    }
+
+    Product::create($data);
 
     return redirect()->route('products.index');
-} /**
-     * Display the specified resource.
-     */
+}
+    
     public function show(string $id)
     {
         //
@@ -73,28 +72,32 @@ public function store(Request $request)
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Product $product)
-    {
-        $request->validate([
-            'nombre' => 'required|string|max:255',
-            'category_id' => 'required|exists:categories,id',
-            'precio' => 'required|numeric|min:0',
-            'stock' => 'required|integer|min:0',
-            'descripcion' => 'nullable|string',
-        ]);
+  public function update(Request $request, Product $product)
+{
+    $request->validate([
+        'nombre' => 'required|string|max:255',
+        'category_id' => 'required|exists:categories,id',
+        'precio' => 'required|numeric|min:0',
+        'stock' => 'required|integer|min:0',
+        'descripcion' => 'nullable|string',
+        'imagen' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+    ]);
 
-        $product->update([
-            'nombre' => $request->nombre,
-            'slug' => Str::slug($request->nombre),
-            'category_id' => $request->category_id,
-            'precio' => $request->precio,
-            'stock' => $request->stock,
-            'descripcion' => $request->descripcion,
-        ]);
+    $data = $request->all();
+    $data['slug'] = Str::slug($request->nombre);
 
-        return redirect()->route('products.index');
+    if ($request->hasFile('imagen')) {
+        // Borrar imagen anterior si existe
+        if ($product->imagen) {
+            Storage::disk('public')->delete($product->imagen);
+        }
+        $data['imagen'] = $request->file('imagen')->store('products', 'public');
     }
 
+    $product->update($data);
+
+    return redirect()->route('products.index');
+}
     /**
      * Remove the specified resource from storage.
      */
