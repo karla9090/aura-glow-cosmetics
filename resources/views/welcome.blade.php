@@ -8,28 +8,52 @@
 </head>
 <body class="bg-gray-50 text-gray-800">
 
-    <!-- Navegación -->
-    <nav class="bg-white shadow-md border-b border-pink-100">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16 items-center">
-                <div class="flex-shrink-0 flex items-center">
-                    <h1 class="text-2xl font-bold text-pink-600">Aura Glow ✨</h1>
-                </div>
-                <div>
-                    @if (Route::has('login'))
-                        @auth
-                            <a href="{{ url('/dashboard') }}" class="text-sm font-semibold text-gray-700 hover:text-pink-600">Panel de Control</a>
-                        @else
-                            <a href="{{ route('login') }}" class="text-sm font-semibold text-gray-700 hover:text-pink-600 mr-4">Iniciar Sesión</a>
-                            @if (Route::has('register'))
-                                <a href="{{ route('register') }}" class="text-sm font-semibold text-white bg-pink-600 hover:bg-pink-700 px-4 py-2 rounded-lg" style="background-color: #db2777;">Registrarse</a>
-                            @endif
-                        @endauth
-                    @endif
-                </div>
+   <nav class="bg-white shadow-md border-b border-pink-100">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16 items-center">
+            <!-- Logo -->
+            <div class="flex-shrink-0 flex items-center">
+                <a href="{{ url('/') }}" class="text-2xl font-bold text-pink-600 no-underline">Aura Glow ✨</a>
+            </div>
+
+            <!-- Menú de Usuario / Autenticación -->
+            <div class="flex items-center gap-4">
+                @if (Route::has('login'))
+                    @auth
+                        <!-- Si es Administrador, mostramos el botón del Panel -->
+                        @if(auth()->user()->role === 'admin')
+                            <a href="{{ url('/dashboard') }}" class="text-sm font-semibold text-pink-600 hover:text-pink-800 mr-2">
+                                📊 Panel Admin
+                            </a>
+                        @endif
+
+                        <!-- Menú del Usuario Autenticado -->
+                        <span class="text-sm font-bold text-gray-700">
+                            👋 {{ Auth::user()->name }}
+                        </span>
+
+                        <a href="{{ route('profile.edit') }}" class="text-sm font-semibold text-gray-600 hover:text-pink-600">
+                            Perfil
+                        </a>
+
+                        <!-- Formulario para Cerrar Sesión -->
+                        <form method="POST" action="{{ route('logout') }}" class="inline">
+                            @csrf
+                            <button type="submit" class="text-sm font-semibold text-red-600 hover:text-red-800 bg-transparent border-0 cursor-pointer">
+                                Cerrar Sesión
+                            </button>
+                        </form>
+                    @else
+                        <a href="{{ route('login') }}" class="text-sm font-semibold text-gray-700 hover:text-pink-600 mr-4">Iniciar Sesión</a>
+                        @if (Route::has('register'))
+                            <a href="{{ route('register') }}" class="text-sm font-semibold text-white bg-pink-600 hover:bg-pink-700 px-4 py-2 rounded-lg" style="background-color: #db2777;">Registrarse</a>
+                        @endif
+                    @endauth
+                @endif
             </div>
         </div>
-    </nav>
+    </div>
+</nav>
 
     <!-- Header / Banner -->
     <header class="bg-pink-50 py-12 text-center border-b border-pink-100">
