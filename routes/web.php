@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
@@ -33,6 +34,17 @@ Route::get('/', function (Request $request) {
 
     return view('welcome', compact('products', 'categories'));
 });
+
+// Rutas del Carrito de Compras (Públicas o accesibles para cualquier usuario)
+Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+Route::post('/cart/add/{id}', [CartController::class, 'add'])->name('cart.add');
+Route::patch('/cart/update/{id}', [CartController::class, 'update'])->name('cart.update');
+Route::delete('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
+
+// Rutas del Checkout interno
+Route::get('/checkout', [CartController::class, 'checkout'])->name('checkout.index');
+Route::post('/checkout/process', [CartController::class, 'processCheckout'])->name('checkout.process');
+Route::get('/checkout/success', [CartController::class, 'success'])->name('checkout.success');
 
 // Panel Principal (Redirección inteligente según el rol)
 Route::get('/dashboard', function () {
