@@ -16,13 +16,22 @@
                 <a href="{{ url('/') }}" class="text-2xl font-bold text-pink-600 no-underline">Aura Glow ✨</a>
             </div>
 
-            <!-- Menú de Usuario / Autenticación -->
+            <!-- Menú de Usuario / Autenticación / Carrito -->
             <div class="flex items-center gap-4">
+
+                <!-- Botón de Carrito (Visible para todos) -->
+                <a href="{{ route('cart.index') }}" class="flex items-center text-gray-700 hover:text-pink-600 font-bold mr-2">
+                    🛒 Carrito
+                    <span class="ml-1 text-white text-xs font-bold px-2 py-0.5 rounded-full" style="background-color: #db2777;">
+                        {{ count((array) session('cart')) }}
+                    </span>
+                </a>
+
                 @if (Route::has('login'))
                     @auth
                         <!-- Si es Administrador, mostramos el botón del Panel -->
                         @if(auth()->user()->role === 'admin')
-                            <a href="{{ url('/dashboard') }}" class="text-sm font-semibold text-pink-600 hover:text-pink-800 mr-2">
+                            <a href="{{ url('/dashboard') }}" class="text-sm font-semibold text-pink-600 hover:text-pink-800">
                                 📊 Panel Admin
                             </a>
                         @endif
@@ -44,9 +53,9 @@
                             </button>
                         </form>
                     @else
-                        <a href="{{ route('login') }}" class="text-sm font-semibold text-gray-700 hover:text-pink-600 mr-4">Iniciar Sesión</a>
+                        <a href="{{ route('login') }}" class="text-sm font-semibold text-gray-700 hover:text-pink-600">Iniciar Sesión</a>
                         @if (Route::has('register'))
-                            <a href="{{ route('register') }}" class="text-sm font-semibold text-white bg-pink-600 hover:bg-pink-700 px-4 py-2 rounded-lg" style="background-color: #db2777;">Registrarse</a>
+                            <a href="{{ route('register') }}" class="text-sm font-semibold text-white px-4 py-2 rounded-lg" style="background-color: #db2777;">Registrarse</a>
                         @endif
                     @endauth
                 @endif
@@ -60,6 +69,15 @@
         <h2 class="text-4xl font-extrabold text-pink-900 mb-2">Realza tu belleza natural</h2>
         <p class="text-pink-700 text-lg">Descubre nuestra colección exclusiva de cosméticos y cuidado personal</p>
     </header>
+
+    <!-- Alertas Flash -->
+    @if(session('success'))
+        <div class="max-w-7xl mx-auto px-4 mt-4">
+            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative">
+                {{ session('success') }}
+            </div>
+        </div>
+    @endif
 
     <!-- Filtros y Buscador -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
@@ -119,11 +137,27 @@
                         </div>
                     </div>
 
-                    <div class="px-5 pb-5 flex justify-between items-center">
-                        <span class="text-xl font-extrabold text-gray-900">${{ number_format($product->precio, 2) }}</span>
-                        <span class="text-xs px-2 py-1 rounded-full {{ $product->stock > 0 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
-                            {{ $product->stock > 0 ? 'Stock: ' . $product->stock : 'Agotado' }}
-                        </span>
+                    <div class="px-5 pb-5">
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="text-xl font-extrabold text-gray-900">${{ number_format($product->precio, 2) }}</span>
+                            <span class="text-xs px-2 py-1 rounded-full {{ $product->stock > 0 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
+                                {{ $product->stock > 0 ? 'Stock: ' . $product->stock : 'Agotado' }}
+                            </span>
+                        </div>
+
+                        <!-- Botón Agregar al Carrito -->
+                        @if($product->stock > 0)
+                            <form action="{{ route('cart.add', $product->id) }}" method="POST">
+                                @csrf
+                                <button type="submit" class="w-full text-white font-bold py-2 px-4 rounded-lg shadow hover:opacity-90 transition flex items-center justify-center gap-2" style="background-color: #db2777;">
+                                    🛒 Agregar al Carrito
+                                </button>
+                            </form>
+                        @else
+                            <button disabled class="w-full bg-gray-300 text-gray-500 font-bold py-2 px-4 rounded-lg cursor-not-allowed">
+                                Producto Agotado
+                            </button>
+                        @endif
                     </div>
                 </div>
             @empty
