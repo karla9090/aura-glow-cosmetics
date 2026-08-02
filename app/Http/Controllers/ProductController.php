@@ -52,17 +52,19 @@ public function store(Request $request)
     return redirect()->route('products.index');
 }
     
-    public function show(string $id)
-    {
-        //
-    }
+   public function show(Product $product)
+{
+    // Carga la relación de categoría si existe
+    $product->load('category');
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    /**
-     * Show the form for editing the specified resource.
-     */
+    // Puedes obtener productos relacionados de la misma categoría
+    $relatedProducts = Product::where('category_id', $product->category_id)
+        ->where('id', '!=', $product->id)
+        ->take(4)
+        ->get();
+
+    return view('products.show', compact('product', 'relatedProducts'));
+}
     public function edit(Product $product)
     {
         $categories = Category::all();
