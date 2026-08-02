@@ -87,8 +87,8 @@
                     </div>
 
                     <a href="{{ route('checkout.index') }}" class="bg-pink-600 hover:bg-pink-700 text-white font-bold py-3 px-6 rounded-lg text-lg shadow transition inline-block">
-    Proceder al Pago →
-</a>
+                      Proceder al Pago →
+                     </a>
                 </div>
             </div>
         @else

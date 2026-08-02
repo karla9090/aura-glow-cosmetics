@@ -33,7 +33,10 @@ Route::get('/', function (Request $request) {
     $products = $query->latest()->get();
 
     return view('welcome', compact('products', 'categories'));
-});
+})->name('home');
+
+// Detalle público de producto
+Route::get('/producto/{product}', [ProductController::class, 'show'])->name('products.show_public');
 
 // Rutas del Carrito de Compras (Públicas o accesibles para cualquier usuario)
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
@@ -41,10 +44,7 @@ Route::post('/cart/add/{id}', [CartController::class, 'add'])->name('cart.add');
 Route::patch('/cart/update/{id}', [CartController::class, 'update'])->name('cart.update');
 Route::delete('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
 
-// Rutas del Checkout interno
-Route::get('/checkout', [CartController::class, 'checkout'])->name('checkout.index');
-Route::post('/checkout/process', [CartController::class, 'processCheckout'])->name('checkout.process');
-Route::get('/checkout/success', [CartController::class, 'success'])->name('checkout.success');
+
 
 // Panel Principal (Redirección inteligente según el rol)
 Route::get('/dashboard', function () {
