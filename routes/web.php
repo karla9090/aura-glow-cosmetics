@@ -45,6 +45,8 @@ Route::patch('/cart/update/{id}', [CartController::class, 'update'])->name('cart
 Route::delete('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
 
 
+Route::get('/checkout', [CartController::class, 'checkout'])->name('checkout.index');
+Route::post('/checkout', [CartController::class, 'processCheckout'])->name('checkout.process');
 
 // Panel Principal (Redirección inteligente según el rol)
 Route::get('/dashboard', function () {
