@@ -8,60 +8,123 @@
 </head>
 <body class="bg-gray-50 text-gray-800">
 
+    @include('layouts.navbar')
 
-     @include('layouts.navbar')
+    <!-- 1. HERO BANNER PRINCIPAL (Estilo Beauty Store) -->
+    <div class="relative bg-gradient-to-b from-pink-50 to-white overflow-hidden border-b border-pink-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16 flex flex-col-reverse md:flex-row items-center justify-between gap-8 relative z-10">
+            
+            <!-- Texto e invitación a comprar -->
+            <div class="flex-1 text-center md:text-left">
+                <span class="inline-block bg-pink-100 text-pink-700 text-xs font-black px-3 py-1 rounded-full uppercase tracking-wider mb-4">
+                    ✨ Nueva Colección 2026
+                </span>
+                <h1 class="text-4xl md:text-5xl lg:text-6xl font-black text-gray-900 tracking-tight leading-tight mb-4">
+                    Realza tu <span class="text-pink-600">belleza natural</span>
+                </h1>
+                <p class="text-gray-600 text-base md:text-lg mb-6 max-w-xl mx-auto md:mx-0">
+                    Descubre nuestra colección exclusiva de cosméticos y cuidado personal. Fórmulas de alta calidad para cuidar y resaltar tu piel todos los días.
+                </p>
+                <a href="#catalogo" class="inline-flex items-center gap-2 text-white font-bold text-sm px-8 py-3.5 rounded-full shadow-lg hover:bg-pink-700 hover:shadow-pink-200 transition-all uppercase tracking-wider" style="background-color: #db2777;">
+                    Explorar Productos 💄
+                </a>
+            </div>
 
-    <!-- Header / Banner -->
-    <header class="bg-pink-50 py-12 text-center border-b border-pink-100">
-        <h2 class="text-4xl font-extrabold text-pink-900 mb-2">Realza tu belleza natural</h2>
-        <p class="text-pink-700 text-lg">Descubre nuestra colección exclusiva de cosméticos y cuidado personal</p>
-    </header>
+            <!-- Imagen Destacada -->
+            <div class="w-full md:w-1/2 max-w-md">
+                <div class="relative">
+                    <div class="absolute -inset-1 bg-gradient-to-r from-pink-400 to-rose-400 rounded-3xl blur opacity-30"></div>
+                    <img src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                         alt="Cosméticos Aura Glow" 
+                         class="relative rounded-3xl shadow-xl border-4 border-white object-cover w-full h-72 md:h-80">
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- 2. INSIGNIAS DE CONFIANZA (Trust Badges) -->
+    <div class="bg-white border-b border-pink-100 py-6">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                <div class="p-3">
+                    <span class="text-2xl mb-1 block">🐰</span>
+                    <h4 class="text-xs font-bold text-gray-800 uppercase">Cruelty Free</h4>
+                    <p class="text-[11px] text-gray-500">Libre de crueldad animal</p>
+                </div>
+                <div class="p-3">
+                    <span class="text-2xl mb-1 block">🚚</span>
+                    <h4 class="text-xs font-bold text-gray-800 uppercase">Envíos Rápidos</h4>
+                    <p class="text-[11px] text-gray-500">A todo el país</p>
+                </div>
+                <div class="p-3">
+                    <span class="text-2xl mb-1 block">💳</span>
+                    <h4 class="text-xs font-bold text-gray-800 uppercase">Pago Seguro</h4>
+                    <p class="text-[11px] text-gray-500">Compras 100% protegidas</p>
+                </div>
+                <div class="p-3">
+                    <span class="text-2xl mb-1 block">✨</span>
+                    <h4 class="text-xs font-bold text-gray-800 uppercase">Calidad Premium</h4>
+                    <p class="text-[11px] text-gray-500">Ingredientes seleccionados</p>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Alertas Flash -->
     @if(session('success'))
-        <div class="max-w-7xl mx-auto px-4 mt-4">
-            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative">
-                {{ session('success') }}
+        <div class="max-w-7xl mx-auto px-4 mt-6">
+            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-2xl text-sm font-semibold flex items-center gap-2">
+                <span>✅</span> {{ session('success') }}
             </div>
         </div>
     @endif
 
-    <!-- Filtros y Buscador -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
-        <form action="{{ url('/') }}" method="GET" class="bg-white p-4 rounded-2xl shadow-sm border border-pink-100 flex flex-col md:flex-row gap-4 justify-between items-center">
-            <!-- Buscar por Nombre -->
-            <div class="w-full md:w-1/2">
-                <input type="text" name="search" value="{{ request('search') }}" placeholder="Buscar productos por nombre..." class="w-full px-4 py-2.5 border border-pink-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-500 text-sm">
-            </div>
+    <!-- 3. SECCIÓN DE BÚSQUEDA Y CATÁLOGO DE PRODUCTOS -->
+    <main id="catalogo" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
 
-            <!-- Filtrar por Categoría -->
-            <div class="w-full md:w-1/3">
-                <select name="category_id" class="w-full px-4 py-2.5 border border-pink-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-500 text-sm font-semibold text-gray-700">
-                    <option value="">Todas las Categorías</option>
-                    @foreach ($categories as $category)
-                        <option value="{{ $category->id }}" {{ request('category_id') == $category->id ? 'selected' : '' }}>
-                            {{ $category->nombre ?? $category->name }}
-                        </option>
-                    @endforeach
-                </select>
-            </div>
+        <!-- Título de la Sección -->
+        <div class="text-center mb-8">
+            <h2 class="text-2xl sm:text-3xl font-black text-gray-900 tracking-tight">Nuestros Productos 🌸</h2>
+            <p class="text-gray-500 text-xs sm:text-sm mt-1">Encuentra tus favoritos de belleza y cuidado personal</p>
+        </div>
 
-            <!-- Botones -->
-            <div class="flex gap-2 w-full md:w-auto">
-                <button type="submit" class="w-full md:w-auto px-6 py-2.5 text-white font-bold rounded-xl text-sm shadow-md hover:bg-pink-700 transition" style="background-color: #db2777;">
-                    Buscar
-                </button>
-                @if(request('search') || request('category_id'))
-                    <a href="{{ url('/') }}" class="w-full md:w-auto px-4 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 text-center font-bold rounded-xl text-sm transition">
-                        Limpiar
-                    </a>
-                @endif
-            </div>
-        </form>
-    </div>
+        <!-- Filtros y Buscador -->
+        <div class="mb-8">
+            <form action="{{ url('/') }}" method="GET" class="bg-white p-4 rounded-2xl shadow-sm border border-pink-100 flex flex-col md:flex-row gap-4 justify-between items-center">
+                
+                <!-- Buscar por Nombre -->
+                <div class="w-full md:w-1/2">
+                    <input type="text" name="search" value="{{ request('search') }}" placeholder="Buscar productos por nombre..." class="w-full px-4 py-2.5 border border-pink-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-500 text-sm">
+                </div>
 
-    <!-- Catálogo de Productos -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                <!-- Filtrar por Categoría -->
+                <div class="w-full md:w-1/3">
+                    <select name="category_id" class="w-full px-4 py-2.5 border border-pink-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-500 text-sm font-semibold text-gray-700">
+                        <option value="">Todas las Categorías</option>
+                        @foreach ($categories as $category)
+                            <option value="{{ $category->id }}" {{ request('category_id') == $category->id ? 'selected' : '' }}>
+                                {{ $category->nombre ?? $category->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <!-- Botones -->
+                <div class="flex gap-2 w-full md:w-auto">
+                    <button type="submit" class="w-full md:w-auto px-6 py-2.5 text-white font-bold rounded-xl text-sm shadow-md hover:bg-pink-700 transition" style="background-color: #db2777;">
+                        Buscar
+                    </button>
+                    @if(request('search') || request('category_id'))
+                        <a href="{{ url('/') }}" class="w-full md:w-auto px-4 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 text-center font-bold rounded-xl text-sm transition">
+                            Limpiar
+                        </a>
+                    @endif
+                </div>
+            </form>
+        </div>
+
+        <!-- Grid de Productos -->
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             @forelse ($products as $product)
                 @php
