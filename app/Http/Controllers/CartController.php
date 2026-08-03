@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Product;
+use App\Models\Order;
 
 class CartController extends Controller
 {
@@ -26,16 +27,19 @@ class CartController extends Controller
         $product = Product::findOrFail($id);
         $cart = session()->get('cart', []);
 
+        // Tomar la cantidad del request si viene desde la vista de detalle
+        $quantity = $request->input('quantity', 1);
+
         // Si el producto ya está en el carrito, incrementamos la cantidad
         if (isset($cart[$id])) {
-            $cart[$id]['quantity']++;
+            $cart[$id]['quantity'] += $quantity;
         } else {
             // Si no está, lo agregamos como un nuevo elemento
             $cart[$id] = [
-                "name" => $product->nombre,
-                "quantity" => 1,
-                "price" => $product->precio,
-                "image" => $product->imagen
+                "name" => $product->nombre ?? $product->name,
+                "quantity" => $quantity,
+                "price" => $product->precio ?? $product->price,
+                "image" => $product->imagen ?? $product->image
             ];
         }
 
@@ -87,7 +91,7 @@ class CartController extends Controller
         return view('cart.checkout', compact('cart', 'total'));
     }
 
-    // Procesar la compra internamente
+    // Procesar la compra y guardar el registro
     public function processCheckout(Request $request)
     {
         $request->validate([
@@ -104,18 +108,34 @@ class CartController extends Controller
         }
 
         $total = 0;
-        foreach ($cart as $item) {
+        foreach ($cart as $id => $item) {
             $total += $item['price'] * $item['quantity'];
+
+            // Descontar stock
+            $product = Product::find($id);
+            if ($product) {
+                $product->stock = max(0, $product->stock - $item['quantity']);
+                $product->save();
+            }
         }
 
-        // Generamos un número de pedido único y guardamos datos en sesión temporal para la confirmación
-        $orderId = 'AG-' . rand(10000, 99999);
+        $orderNumber = 'AG-' . rand(10000, 99999);
 
-        // Limpiamos el carrito de compras
+        // Guardar el pedido en la BD si el usuario está autenticado
+        if (auth()->check()) {
+            Order::create([
+                'user_id' => auth()->id(),
+                'order_number' => $orderNumber,
+                'total' => $total,
+                'items' => $cart,
+                'status' => 'Procesando',
+            ]);
+        }
+
         session()->forget('cart');
 
-        return redirect()->route('checkout.success')->with([
-            'order_id' => $orderId,
+        return redirect()->route('cart.success')->with([
+            'order_id' => $orderNumber,
             'order_name' => $request->name,
             'order_total' => $total
         ]);
@@ -125,5 +145,12 @@ class CartController extends Controller
     public function success()
     {
         return view('cart.success');
+    }
+
+    // Historial de compras del usuario autenticado
+    public function myOrders()
+    {
+        $orders = Order::where('user_id', auth()->id())->latest()->get();
+        return view('orders.index', compact('orders'));
     }
 }

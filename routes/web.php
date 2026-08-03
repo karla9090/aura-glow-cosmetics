@@ -47,6 +47,7 @@ Route::delete('/cart/remove/{id}', [CartController::class, 'remove'])->name('car
 
 Route::get('/checkout', [CartController::class, 'checkout'])->name('checkout.index');
 Route::post('/checkout', [CartController::class, 'processCheckout'])->name('checkout.process');
+Route::get('/compra-exitosa', [CartController::class, 'success'])->name('cart.success');
 
 // Panel Principal (Redirección inteligente según el rol)
 Route::get('/dashboard', function () {
@@ -67,6 +68,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    // --- RUTA DE MIS PEDIDOS ---
+    Route::get('/mis-pedidos', [CartController::class, 'myOrders'])->name('orders.index');
 
     // Módulos EXCLUSIVOS para Administrador
     Route::middleware(AdminMiddleware::class)->group(function () {

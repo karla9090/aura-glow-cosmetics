@@ -36,6 +36,11 @@
                             </a>
                         @endif
 
+                        <!-- Opción de Mis Pedidos (Solo usuarios autenticados) -->
+                        <a href="{{ route('orders.index') }}" class="text-sm font-semibold text-gray-600 hover:text-pink-600">
+                            🛍️ Mis Pedidos
+                        </a>
+
                         <!-- Menú del Usuario Autenticado -->
                         <span class="text-sm font-bold text-gray-700">
                             👋 {{ Auth::user()->name }}
