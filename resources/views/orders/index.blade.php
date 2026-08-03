@@ -8,13 +8,7 @@
 </head>
 <body class="bg-gray-50 text-gray-800">
 
-    <!-- Navegación -->
-    <nav class="bg-white shadow-md border-b border-pink-100 mb-8">
-        <div class="max-w-7xl mx-auto px-4 h-16 flex justify-between items-center">
-            <a href="{{ url('/') }}" class="text-2xl font-bold text-pink-600">Aura Glow ✨</a>
-            <a href="{{ url('/') }}" class="text-xs font-bold text-gray-600 hover:text-pink-600">← Volver al Catálogo</a>
-        </div>
-    </nav>
+    @include('layouts.navbar')
 
     <main class="max-w-4xl mx-auto px-4 pb-12">
         <h1 class="text-2xl font-black text-gray-900 mb-6 flex items-center gap-2">

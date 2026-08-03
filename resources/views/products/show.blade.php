@@ -10,54 +10,7 @@
 <body class="bg-gray-50 text-gray-800">
 
     <!-- Navegación -->
-    <nav class="bg-white shadow-md border-b border-pink-100">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16 items-center">
-                <div class="flex-shrink-0 flex items-center">
-                    <a href="{{ url('/') }}" class="text-2xl font-bold text-pink-600 no-underline">Aura Glow ✨</a>
-                </div>
-
-                <div class="flex items-center gap-4">
-                    <a href="{{ route('cart.index') }}" class="flex items-center text-gray-700 hover:text-pink-600 font-bold mr-2">
-                        🛒 Carrito
-                        <span class="ml-1 text-white text-xs font-bold px-2 py-0.5 rounded-full" style="background-color: #db2777;">
-                            {{ count((array) session('cart')) }}
-                        </span>
-                    </a>
-
-                    @if (Route::has('login'))
-                        @auth
-                            @if(auth()->user()->role === 'admin')
-                                <a href="{{ url('/dashboard') }}" class="text-sm font-semibold text-pink-600 hover:text-pink-800">
-                                    📊 Panel Admin
-                                </a>
-                            @endif
-
-                            <span class="text-sm font-bold text-gray-700">
-                                👋 {{ Auth::user()->name }}
-                            </span>
-
-                            <a href="{{ route('profile.edit') }}" class="text-sm font-semibold text-gray-600 hover:text-pink-600">
-                                Perfil
-                            </a>
-
-                            <form method="POST" action="{{ route('logout') }}" class="inline">
-                                @csrf
-                                <button type="submit" class="text-sm font-semibold text-red-600 hover:text-red-800 bg-transparent border-0 cursor-pointer">
-                                    Cerrar Sesión
-                                </button>
-                            </form>
-                        @else
-                            <a href="{{ route('login') }}" class="text-sm font-semibold text-gray-700 hover:text-pink-600">Iniciar Sesión</a>
-                            @if (Route::has('register'))
-                                <a href="{{ route('register') }}" class="text-sm font-semibold text-white px-4 py-2 rounded-lg" style="background-color: #db2777;">Registrarse</a>
-                            @endif
-                        @endauth
-                    @endif
-                </div>
-            </div>
-        </div>
-    </nav>
+   @include('layouts.navbar')
 
     <!-- Alertas Flash -->
     @if(session('success'))
