@@ -1,16 +1,5 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mis Pedidos - Aura Glow</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-50 text-gray-800">
-
-    @include('layouts.navbar')
-
-    <main class="max-w-4xl mx-auto px-4 pb-12">
+<x-app-layout>
+    <main class="max-w-4xl mx-auto px-4 pt-8 pb-12">
         <h1 class="text-2xl font-black text-gray-900 mb-6 flex items-center gap-2">
             🛍️ Mis Pedidos Realizados
         </h1>
@@ -55,6 +44,4 @@
             </div>
         @endforelse
     </main>
-
-</body>
-</html>
+</x-app-layout>
