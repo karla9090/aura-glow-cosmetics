@@ -5,12 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aura Glow Cosmetics</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .slide-fade {
+            transition: opacity 0.8s ease-in-out;
+        }
+    </style>
 </head>
 <body class="bg-gray-50 text-gray-800">
 
     @include('layouts.navbar')
 
-    <!-- 1. HERO BANNER PRINCIPAL (Estilo Beauty Store) -->
+    <!-- 1. HERO BANNER PRINCIPAL CON SLIDER (4 segundos) -->
     <div class="relative bg-gradient-to-b from-pink-50 to-white overflow-hidden border-b border-pink-100">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16 flex flex-col-reverse md:flex-row items-center justify-between gap-8 relative z-10">
             
@@ -30,13 +35,35 @@
                 </a>
             </div>
 
-            <!-- Imagen Destacada -->
+            <!-- Slider / Carrusel de Imágenes Profetional -->
             <div class="w-full md:w-1/2 max-w-md">
                 <div class="relative">
                     <div class="absolute -inset-1 bg-gradient-to-r from-pink-400 to-rose-400 rounded-3xl blur opacity-30"></div>
-                    <img src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
-                         alt="Cosméticos Aura Glow" 
-                         class="relative rounded-3xl shadow-xl border-4 border-white object-cover w-full h-72 md:h-80">
+                    
+                    <!-- Contenedor del Carrusel -->
+                    <div class="relative rounded-3xl shadow-xl border-4 border-white overflow-hidden w-full h-72 md:h-80 bg-pink-100">
+                        <!-- Slide 1 -->
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTKdMLYlanGMgI3g4m8SvNNPR-To0-uhriEMnR7SXtx4w&s=10" 
+                             alt="Set de Maquillaje Aura Glow" 
+                             class="hero-slide slide-fade absolute inset-0 w-full h-full object-cover opacity-100">
+                        
+                        <!-- Slide 2 -->
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR_vJH1bk_lVfT5rvNIX7aK1Bx3weTtjpICyVDe-4r6IQ&s=10" 
+                             alt="Pinceles y Labiales Aura Glow" 
+                             class="hero-slide slide-fade absolute inset-0 w-full h-full object-cover opacity-0">
+                        
+                        <!-- Slide 3 -->
+                        <img src="https://images.unsplash.com/photo-1512496015851-a90fb38ba796?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                             alt="Cosméticos y Cuidado Facial Aura Glow" 
+                             class="hero-slide slide-fade absolute inset-0 w-full h-full object-cover opacity-0">
+
+                        <!-- Indicadores de Barra en la Parte Inferior -->
+                        <div class="absolute bottom-3 left-1/2 transform -translate-x-1/2 flex gap-2 z-20">
+                            <button onclick="setSlide(0)" class="slide-indicator w-8 h-1.5 rounded-full bg-white/90 transition-all shadow"></button>
+                            <button onclick="setSlide(1)" class="slide-indicator w-3 h-1.5 rounded-full bg-white/50 transition-all shadow"></button>
+                            <button onclick="setSlide(2)" class="slide-indicator w-3 h-1.5 rounded-full bg-white/50 transition-all shadow"></button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -207,6 +234,61 @@
             @endforelse
         </div>
     </main>
+
+    <!-- Script del Slider Automático (Cada 4 segundos) -->
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.hero-slide');
+        const indicators = document.querySelectorAll('.slide-indicator');
+        const totalSlides = slides.length;
+        let slideInterval;
+
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                if (i === index) {
+                    slide.classList.remove('opacity-0');
+                    slide.classList.add('opacity-100');
+                } else {
+                    slide.classList.remove('opacity-100');
+                    slide.classList.add('opacity-0');
+                }
+            });
+
+            indicators.forEach((indicator, i) => {
+                if (i === index) {
+                    indicator.classList.remove('w-3', 'bg-white/50');
+                    indicator.classList.add('w-8', 'bg-white/90');
+                } else {
+                    indicator.classList.remove('w-8', 'bg-white/90');
+                    indicator.classList.add('w-3', 'bg-white/50');
+                }
+            });
+
+            currentSlide = index;
+        }
+
+        function nextSlide() {
+            let nextIndex = (currentSlide + 1) % totalSlides;
+            showSlide(nextIndex);
+        }
+
+        function setSlide(index) {
+            showSlide(index);
+            resetInterval();
+        }
+
+        function startInterval() {
+            slideInterval = setInterval(nextSlide, 4000); // 4000 ms = 4 segundos
+        }
+
+        function resetInterval() {
+            clearInterval(slideInterval);
+            startInterval();
+        }
+
+        // Iniciar Slider
+        startInterval();
+    </script>
 
 </body>
 </html>

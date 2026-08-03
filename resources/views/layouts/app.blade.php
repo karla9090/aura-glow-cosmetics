@@ -11,6 +11,9 @@
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700&display=swap" rel="stylesheet" />
         <script src="https://cdn.tailwindcss.com"></script>
+
+        <!-- Alpine.js (Indispensable para que funcionen los menús desplegables) -->
+        <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     </head>
     <body class="font-sans antialiased bg-pink-50/50 text-gray-800 min-h-screen">
         <div class="min-h-screen">
