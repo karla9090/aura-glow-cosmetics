@@ -1,92 +1,85 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Crear Nuevo Producto') }}
-        </h2>
-    </x-slot>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nuevo Producto - Aura Glow</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 text-gray-800">
 
-    <div class="py-12">
-        <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-                <!-- Se incluye enctype para permitir el envío de archivos -->
-                <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data">
-                    @csrf
+    @include('layouts.navbar')
 
-                    <!-- Nombre -->
-                    <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2">Nombre del Producto</label>
-                        <input type="text" name="nombre" class="w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required>
-                    </div>
-
-                    <!-- Categoría -->
-                    <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2">Categoría</label>
-                        <select name="category_id" class="w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required>
-                            <option value="">-- Selecciona una categoría --</option>
-                            @foreach ($categories as $category)
-                                <option value="{{ $category->id }}">{{ $category->nombre }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <!-- Precio y Stock -->
-                    <div class="grid grid-cols-2 gap-4 mb-4">
-                        <div>
-                            <label class="block text-gray-700 text-sm font-bold mb-2">Precio ($)</label>
-                            <input type="number" step="0.01" name="precio" class="w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required>
-                        </div>
-                        <div>
-                            <label class="block text-gray-700 text-sm font-bold mb-2">Stock Inicial</label>
-                            <input type="number" name="stock" class="w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required>
-                        </div>
-                    </div>
-
-                    <!-- Descripción -->
-                    <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2">Descripción</label>
-                        <textarea name="descripcion" class="w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500" rows="3"></textarea>
-                    </div>
-
-                    <!-- Imagen del Producto con Previsualización -->
-                    <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2">Imagen del Producto</label>
-                        <input type="file" name="imagen" id="imagen-input" accept="image/*" class="w-full border-gray-300 rounded-md shadow-sm p-2 border">
-                        
-                        <!-- Vista previa de la imagen cargada -->
-                        <div class="mt-3 hidden" id="preview-container">
-                            <span class="text-xs text-gray-500 block mb-1">Vista previa de la imagen:</span>
-                            <img id="image-preview" src="#" alt="Previsualización" class="w-32 h-32 object-cover rounded-md border shadow-sm">
-                        </div>
-                    </div>
-
-                    <!-- Botones -->
-                    <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
-                        <a href="{{ route('products.index') }}" 
-                           style="background-color: #6b7280; color: white; padding: 10px 20px; border-radius: 6px; text-decoration: none; font-weight: bold;">
-                            Cancelar
-                        </a>
-                        <button type="submit" 
-                                style="background-color: #db2777; color: white; padding: 10px 20px; border-radius: 6px; font-weight: bold; border: none; cursor: pointer;">
-                            Guardar Producto
-                        </button>
-                    </div>
-                </form>
-            </div>
+    <main class="max-w-3xl mx-auto px-4 py-10">
+        
+        <!-- Encabezado -->
+        <div class="mb-8">
+            <a href="{{ route('products.index') }}" class="text-xs font-bold text-pink-600 hover:text-pink-700 flex items-center gap-1 mb-2">
+                ← Volver al catálogo
+            </a>
+            <h1 class="text-3xl font-black text-gray-900 tracking-tight flex items-center gap-2">
+                Agregar Nuevo Producto ✨
+            </h1>
         </div>
-    </div>
 
-    <!-- Script para generar la vista previa al seleccionar el archivo -->
-    <script>
-        document.getElementById('imagen-input').addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(event) {
-                    document.getElementById('image-preview').setAttribute('src', event.target.result);
-                    document.getElementById('preview-container').classList.remove('hidden');
-                }
-                reader.readAsDataURL(file);
-            }
-        });
-    </script>
-</x-app-layout>
+        <!-- Tarjeta del Formulario -->
+        <div class="bg-white rounded-3xl p-8 border border-pink-100 shadow-sm">
+            <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+                @csrf
+
+                <div>
+                    <label class="block text-xs font-extrabold text-gray-700 uppercase mb-2">Nombre del Producto *</label>
+                    <input type="text" name="nombre" value="{{ old('nombre') }}" placeholder="Ej. Blush Liquido Pink Up" required class="w-full px-4 py-3 rounded-2xl border border-pink-100 focus:border-pink-500 focus:ring-2 focus:ring-pink-200 outline-none transition text-sm font-semibold">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-extrabold text-gray-700 uppercase mb-2">Categoría *</label>
+                    <select name="category_id" required class="w-full px-4 py-3 rounded-2xl border border-pink-100 focus:border-pink-500 focus:ring-2 focus:ring-pink-200 outline-none transition text-sm font-semibold text-gray-700">
+                        <option value="" disabled selected>Selecciona una categoría</option>
+                        @foreach ($categories as $category)
+                            <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
+                                {{ $category->nombre ?? $category->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-xs font-extrabold text-gray-700 uppercase mb-2">Precio ($ MXN) *</label>
+                        <input type="number" step="0.01" name="precio" value="{{ old('precio') }}" placeholder="0.00" required class="w-full px-4 py-3 rounded-2xl border border-pink-100 focus:border-pink-500 focus:ring-2 focus:ring-pink-200 outline-none transition text-sm font-semibold">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-extrabold text-gray-700 uppercase mb-2">Stock Inicial *</label>
+                        <input type="number" name="stock" value="{{ old('stock', 10) }}" required class="w-full px-4 py-3 rounded-2xl border border-pink-100 focus:border-pink-500 focus:ring-2 focus:ring-pink-200 outline-none transition text-sm font-semibold">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-extrabold text-gray-700 uppercase mb-2">Descripción</label>
+                    <textarea name="descripcion" rows="4" placeholder="Escribe los detalles, tonos o características del cosmético..." class="w-full px-4 py-3 rounded-2xl border border-pink-100 focus:border-pink-500 focus:ring-2 focus:ring-pink-200 outline-none transition text-sm font-medium">{{ old('descripcion') }}</textarea>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-extrabold text-gray-700 uppercase mb-2">Imagen de Producto</label>
+                    <div class="p-4 bg-pink-50/50 rounded-2xl border border-pink-100">
+                        <input type="file" name="imagen" accept="image/*" class="block w-full text-xs text-gray-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-pink-100 file:text-pink-700 hover:file:bg-pink-200 cursor-pointer">
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-end gap-3 pt-4 border-t border-gray-100">
+                    <a href="{{ route('products.index') }}" class="px-6 py-3 rounded-2xl bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold text-xs uppercase transition">
+                        Cancelar
+                    </a>
+                    <button type="submit" class="px-8 py-3 rounded-2xl text-white font-bold text-xs uppercase shadow-lg hover:bg-pink-700 transition" style="background-color: #db2777;">
+                        Guardar Producto ✨
+                    </button>
+                </div>
+
+            </form>
+        </div>
+
+    </main>
+
+</body>
+</html>
