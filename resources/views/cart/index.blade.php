@@ -8,17 +8,7 @@
 </head>
 <body class="bg-gray-50 text-gray-800 font-sans">
 
-    <!-- Navegación -->
-    <nav class="bg-white shadow-md border-b border-pink-100">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16 items-center">
-                <a href="{{ url('/') }}" class="text-2xl font-bold text-pink-600 no-underline">Aura Glow ✨</a>
-                <a href="{{ url('/') }}" class="text-sm font-semibold text-gray-600 hover:text-pink-600">
-                    ← Seguir Comprando
-                </a>
-            </div>
-        </div>
-    </nav>
+    @include('layouts.navbar')
 
     <div class="max-w-5xl mx-auto px-4 py-8">
         <h1 class="text-2xl font-bold text-gray-800 mb-6">Tu Carrito de Compras 🛍️</h1>
