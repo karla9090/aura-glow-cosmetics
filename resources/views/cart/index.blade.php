@@ -8,7 +8,7 @@
 </head>
 <body class="bg-gray-50 text-gray-800 font-sans">
 
-    @include('layouts.navbar')
+    @include('layouts.navigation')
 
     <div class="max-w-5xl mx-auto px-4 py-8">
         <h1 class="text-2xl font-bold text-gray-800 mb-6">Tu Carrito de Compras 🛍️</h1>

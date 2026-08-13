@@ -1,4 +1,4 @@
-<!-- Menú de Navegación Aura Glow -->
+<!-- Menú de Navegación Aura Glow Unificado -->
 <div class="sticky top-0 z-50 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto pt-4">
     <nav class="bg-white/80 backdrop-blur-2xl border border-white/80 rounded-3xl sm:rounded-full shadow-lg">
         
@@ -34,11 +34,16 @@
                     @auth
                         <div class="w-px h-6 bg-pink-200 mx-1"></div>
 
-                        @if(auth()->user()->role === 'admin')
-                            <a href="{{ url('/dashboard') }}" class="px-4 py-2 rounded-full bg-pink-100 text-pink-700 font-bold">📊 Admin</a>
+                        {{-- ENLACE AL PANEL DE CONTROL SI ES ADMIN --}}
+                        @if((Auth::user()->role === 'admin') || (Auth::user()->is_admin ?? false))
+                            <a href="{{ url('/dashboard') }}" class="px-4 py-2 rounded-full bg-pink-100 text-pink-700 font-bold transition hover:bg-pink-200">
+                                📊 Admin Panel
+                            </a>
                         @endif
 
-                        <a href="{{ route('orders.index') }}" class="px-4 py-2 hover:text-pink-600">🛍️ Mis Pedidos</a>
+                        <a href="{{ route('orders.index') ?? '#' }}" class="px-4 py-2 hover:text-pink-600 transition">
+                            🛍️ Mis Pedidos
+                        </a>
 
                         <div class="w-px h-6 bg-pink-200 mx-1"></div>
 
@@ -50,17 +55,17 @@
                                 <div class="w-7 h-7 rounded-full bg-pink-500 text-white flex items-center justify-center font-black text-xs">
                                     {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
                                 </div>
-                                <span class="font-bold text-gray-800">{{ Auth::user()->name }}</span>
+                                <span class="font-bold text-gray-800 capitalize">{{ Auth::user()->name }}</span>
                                 <svg class="w-3.5 h-3.5 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path>
                                 </svg>
                             </button>
 
-                            <!-- Pestaña desplegable (Oculta por defecto) -->
+                            <!-- Pestaña desplegable -->
                             <div id="userMenuDropdown"
                                  class="hidden-menu absolute right-0 top-full mt-2 w-56 bg-white border border-pink-100 rounded-2xl shadow-xl p-2 z-50 space-y-1">
                                 
-                                <a href="{{ route('profile.edit') }}" class="flex items-center gap-3 px-4 py-2.5 text-xs font-semibold text-gray-700 rounded-xl hover:bg-pink-50 hover:text-pink-600">
+                                <a href="{{ route('profile.edit') }}" class="flex items-center gap-3 px-4 py-2.5 text-xs font-semibold text-gray-700 rounded-xl hover:bg-pink-50 hover:text-pink-600 transition">
                                     <span>👤</span> Mi Perfil
                                 </a>
 
@@ -68,11 +73,23 @@
 
                                 <form method="POST" action="{{ route('logout') }}">
                                     @csrf
-                                    <button type="submit" class="w-full flex items-center gap-3 px-4 py-2.5 text-xs font-semibold text-red-600 rounded-xl hover:bg-red-50">
+                                    <button type="submit" class="w-full flex items-center gap-3 px-4 py-2.5 text-xs font-semibold text-red-600 rounded-xl hover:bg-red-50 transition">
                                         <span>🚪</span> Cerrar Sesión
                                     </button>
                                 </form>
                             </div>
+                        </div>
+                    @else
+                        {{-- VISITANTES NO AUTENTICADOS --}}
+                        <div class="flex items-center gap-2 border-l border-pink-100 pl-3">
+                            <a href="{{ route('login') }}" class="text-xs font-extrabold text-gray-700 hover:text-pink-600 px-3 py-2 rounded-xl transition">
+                                Iniciar Sesión
+                            </a>
+                            @if (Route::has('register'))
+                                <a href="{{ route('register') }}" class="text-xs font-extrabold text-white px-4 py-2 rounded-full shadow-sm hover:bg-pink-700 transition" style="background-color: #db2777;">
+                                    Registrarse
+                                </a>
+                            @endif
                         </div>
                     @endauth
                 @endif
@@ -81,7 +98,7 @@
     </nav>
 </div>
 
-<!-- Script en JavaScript Vanilla (Sin fallos de librerías) -->
+<!-- Script en JavaScript Vanilla -->
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const btn = document.getElementById('userMenuBtn');

@@ -13,7 +13,7 @@
 </head>
 <body class="bg-gray-50 text-gray-800">
 
-    @include('layouts.navbar')
+  @include('layouts.navigation')
 
     <!-- 1. HERO BANNER PRINCIPAL CON SLIDER (4 segundos) -->
     <div class="relative bg-gradient-to-b from-pink-50 to-white overflow-hidden border-b border-pink-100">
